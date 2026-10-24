@@ -1,140 +1,149 @@
 # PingWatch
 
-Eine native Mac-App, die Hosts und Webseiten überwacht und sich bemerkbar macht, wenn sich etwas ändert: Ton, Systembanner und eine Oberfläche im Stil von [PingPlotter](https://www.pingplotter.com) mit Route, Latenz-Graph und Timeline.
+**English** · [Deutsch](README.de.md)
 
-Geschrieben in Swift und SwiftUI, ohne Fremdbibliotheken. Die Oberfläche nutzt Liquid Glass von macOS 26.
+A native Mac app that watches hosts and websites and lets you know when something changes: with a sound, a system banner and a [PingPlotter](https://www.pingplotter.com)-style interface showing the route, a latency graph and a timeline.
 
-<p align="center">
-  <img src="docs/screenshot.png" alt="PingWatch: Hosttabelle, Route mit Latenz-Graph und Timeline" width="820">
-</p>
-
-## Funktionen
-
-**Überwachen**
-- **Ping:** IP-Adressen und Hostnamen (IPv4 und IPv6) werden per `ping` geprüft.
-- **Web:** Eine Seite wird per HTTP oder HTTPS geladen. Als „OK“ gilt ein 2xx-Status. Die App zeigt Statuscode und Ladezeit.
-- **Art der Prüfung bei der Eingabe wählbar:** Ping oder Web. Bei Web reicht `example.com`, daraus wird `https://example.com`. Bei Ping wird aus `https://www.example.com/seite` der Host `www.example.com`.
-- **Intervall pro Host:** Standardwerte für Ping (5 s) und Web (30 s) in den Einstellungen, dazu ein eigener Wert pro Host in der Tabelle.
-- **Verlauf der Eingaben:** Die letzten 50 Hosts und Web-Adressen werden gespeichert und beim Tippen vorgeschlagen.
-
-**Melden**
-- **Ton:** Beim Wechsel zu „erreichbar“ spielt die App PING, beim Wechsel zu „nicht erreichbar“ DOWN, jeweils in einstellbarer Anzahl (1 bis 20) und mit frei wählbarem Systemton. Beim Auswählen eines Tons hörst du ihn einmal.
-- **Fehlversuche bis DOWN:** Ein Host gilt erst nach einer einstellbaren Zahl fehlgeschlagener Prüfungen in Folge als nicht erreichbar (Standard 2), damit ein einzelner verlorener Ping keinen Alarm auslöst.
-- **Systembanner:** Bei „wieder erreichbar“, „nicht erreichbar“ und bei Web-Hosts auch, wenn sich der HTTP-Status ändert, zum Beispiel 200 → 503.
-- **Mute-Knopf** (⇧⌘M): schaltet die Alarmtöne stumm. Banner bleiben aktiv.
+Written in Swift and SwiftUI, with no third-party libraries. The interface uses Liquid Glass from macOS 26.
 
 <p align="center">
-  <img src="docs/notification-banner.png" alt="Systembanner: Host ist nicht erreichbar" width="400">
+  <img src="docs/screenshot.png" alt="PingWatch: host table, route with latency graph and timeline" width="820">
+</p>
+<p align="center"><sub>The screenshot shows the German interface. The app follows your macOS language.</sub></p>
+
+## Features
+
+**Monitor**
+- **Ping:** IP addresses and hostnames (IPv4 and IPv6) are checked with `ping`.
+- **Web:** A page is loaded over HTTP or HTTPS. A 2xx status counts as OK. The app shows the status code and the load time.
+- **Choose the type of check when you add a host:** Ping or Web. For Web, `example.com` is enough and becomes `https://example.com`. For Ping, `https://www.example.com/page` is reduced to the host `www.example.com`.
+- **Interval per host:** Default values for Ping (5 s) and Web (30 s) in the settings, plus a separate value for each host in the table.
+- **Input history:** The last 50 hosts and web addresses are saved and suggested as you type.
+
+**Notify**
+- **Sound:** When a host becomes reachable the app plays PING, when it becomes unreachable it plays DOWN. Each can be repeated 1 to 20 times and uses any system sound you pick. Choosing a sound plays it once.
+- **Failed checks before DOWN:** A host only counts as unreachable after a configurable number of failed checks in a row (default 2), so a single lost ping does not raise an alarm.
+- **System banners:** When a host is reachable again, when it is unreachable, and for web hosts also when the HTTP status changes, for example 200 → 503.
+- **Mute button** (⇧⌘M): silences the alarm sounds. Banners stay on.
+
+<p align="center">
+  <img src="docs/notification-banner.png" alt="System banner: host is unreachable" width="400">
 </p>
 
-**Analysieren**
-- **Hosttabelle** mit aktueller, durchschnittlicher, minimaler und maximaler Antwortzeit, Verlust in Prozent, HTTP-Status und einem Mini-Verlauf.
-- **Trace Graph:** Für den gewählten Host wird die Route per Traceroute ermittelt. Jede Zeile ist ein Router mit IP, Name, Ø, Min, aktuell und Verlust. Daneben zeigt ein Graph pro Zeile den Bereich von Min bis Max, den Verlust und den Durchschnitt. Eine Linie verbindet die Durchschnitte der Hops, sodass man sieht, welcher Hop wie viel Latenz dazubringt.
-- **Timeline:** Latenz des gewählten Hops oder des Ziels über die Zeit. Verlorene Pings erscheinen als rote Linien. Die Höhe lässt sich verstellen oder die Timeline ausblenden.
-- **Zeitraum:** 5 Minuten, 15 Minuten, 1 Stunde oder alles.
-- **Farbzonen** wie bei PingPlotter: grün bis 100 ms, gelb bis 200 ms, rot darüber.
+**Analyze**
+- **Host table** with current, average, minimum and maximum response time, loss in percent, HTTP status and a small history graph.
+- **Trace graph:** For the selected host the route is determined with traceroute. Each row is a router with IP, name, average, min, current and loss. Next to it a graph per row shows the min–max range, the loss and the average. A line joins the averages of the hops, so you can see which hop adds how much latency.
+- **Timeline:** Latency of the selected hop or of the target over time. Lost pings appear as red lines. The height can be adjusted, or the timeline hidden.
+- **Time range:** 5 minutes, 15 minutes, 1 hour or everything.
+- **Colour zones** like PingPlotter: green up to 100 ms, yellow up to 200 ms, red above.
 
-Hosts, Einstellungen, die Auswahl und die Eingabe-Historie bleiben nach einem Neustart erhalten. Die Messwerte selbst werden nicht gespeichert.
+**Language**
+- The app is available in **English and German** and follows the system language. Any other language shows English. To use a different language for PingWatch only, go to *System Settings → General → Language & Region → Applications*.
 
-## Download und Installation
+Hosts, settings, the selection and the input history are kept across restarts. The measurements themselves are not saved.
 
-Die fertige App gibt es auf der [Releases-Seite](https://github.com/abrocker/pingwatch/releases/latest) als ZIP-Datei (`PingWatch-1.0.0.zip`). Sie läuft auf Apple-Silicon- und Intel-Macs mit **macOS 26 oder neuer**.
+## Download and installation
 
-1. Die ZIP-Datei laden und per Doppelklick entpacken. Danach `PingWatch.app` in den Ordner **Programme** ziehen.
-2. `PingWatch` per Doppelklick starten. macOS zeigt beim ersten Mal eine Warnung, dass die App nicht geöffnet werden kann, weil der Entwickler nicht überprüft werden konnte. Das ist erwartbar (siehe unten). Schließe die Meldung.
-3. Öffne **Systemeinstellungen → Datenschutz & Sicherheit**, scrolle nach unten zur Meldung über PingWatch und klicke auf **Trotzdem öffnen**. Bestätige mit deinem Passwort oder Touch ID. Das ist nur beim ersten Start nötig.
-4. Beim ersten Start fragt macOS, ob PingWatch Mitteilungen senden darf. Erlaube es, wenn du Systembanner möchtest.
+Download the ready-made app from the [Releases page](https://github.com/abrocker/pingwatch/releases/latest) as a ZIP file (`PingWatch-1.1.0.zip`). It runs on Apple Silicon and Intel Macs with **macOS 26 or later**.
 
-Statt Schritt 2 und 3 geht es auch im Terminal. Der Befehl entfernt die Download-Markierung, danach startet die App normal:
+1. Download the ZIP file and double-click it to unpack it. Then drag `PingWatch.app` into the **Applications** folder.
+2. Start `PingWatch` with a double-click. The first time, macOS shows a warning that the app cannot be opened because the developer could not be verified. That is expected (see below). Close the message.
+3. Open **System Settings → Privacy & Security**, scroll down to the message about PingWatch and click **Open Anyway**. Confirm with your password or Touch ID. You only need to do this on the first start.
+4. On first launch macOS asks whether PingWatch may send notifications. Allow it if you want system banners.
+
+Instead of steps 2 and 3 you can use the Terminal. This command removes the download mark, after which the app starts normally:
 
 ```bash
 xattr -dr com.apple.quarantine /Applications/PingWatch.app
 ```
 
-**Warum die Warnung?** Die App ist nur ad hoc signiert, nicht mit einer Apple-Developer-ID signiert und notarisiert. Dafür wäre ein kostenpflichtiges Apple-Entwicklerkonto nötig. Wenn du der Datei nicht traust, vergleiche die Prüfsumme (`shasum -a 256 PingWatch-1.0.0.zip`) mit der Angabe auf der Releases-Seite oder baue die App aus dem Quellcode.
+**Why the warning?** The app is only signed ad hoc, not signed with an Apple Developer ID and notarized. That would need a paid Apple developer account. If you do not trust the file, compare the checksum (`shasum -a 256 PingWatch-1.1.0.zip`) with the one on the Releases page, or build the app from source.
 
-## Aus dem Quellcode bauen
+## Build from source
 
-Voraussetzungen:
+Requirements:
 
-- macOS 26 oder neuer
-- Xcode mit Swift-Toolchain (entwickelt und getestet mit Xcode 27.1, Swift 6.4)
+- macOS 26 or later
+- Xcode with a Swift toolchain (developed and tested with Xcode 27.1, Swift 6.4)
 
 ```bash
 ./build_app.sh
 open build/PingWatch.app
 ```
 
-Das Skript baut die App im Release-Modus, legt das App-Bundle mit Icon in `build/PingWatch.app` an und signiert es ad hoc. Beim ersten Start fragt macOS, ob PingWatch Mitteilungen senden darf. Ohne Erlaubnis arbeitet die App weiter, nur die Banner fehlen. Die Einstellungen zeigen dann einen Hinweis.
+The script builds the app in release mode, creates the app bundle with icon in `build/PingWatch.app` and signs it ad hoc. On first launch macOS asks whether PingWatch may send notifications. Without permission the app keeps working, only the banners are missing, and the settings show a note.
 
-Tests laufen mit:
+Run the tests with:
 
 ```bash
 swift test
 ```
 
-## Bedienung
+## Usage
 
-1. Oben **Ping** oder **Web** wählen, Adresse eintragen, mit Enter oder **Hinzufügen** bestätigen. Mehrere Einträge lassen sich mit Leerzeichen oder Komma trennen.
-2. In der Tabelle einen Host anklicken: Darunter erscheinen Route und Timeline.
-3. In der Route einen Hop anklicken, um dessen Timeline zu sehen. Die Zeile „Round Trip“ ist das Ziel selbst, bei Web-Hosts die HTTP-Ladezeit.
-4. Das Zahnrad öffnet die Einstellungen: Standard-Intervalle, Töne, Wiederholungen, Fehlversuche bis DOWN und die Systembanner.
+1. Choose **Ping** or **Web** at the top, enter an address and confirm with Enter or **Add**. You can enter several addresses separated by spaces or commas.
+2. Click a host in the table: below it you see the route and the timeline.
+3. Click a hop in the route to see its timeline. The "Round Trip" row is the target itself, for web hosts the HTTP load time.
+4. The gear opens the settings: default intervals, sounds, repeats, failed checks before DOWN and system banners.
 
-## Wie es funktioniert
+## How it works
 
-- **Ping** ruft `/sbin/ping` auf (`ping6` bei IPv6), mit einer Zeitüberschreitung von zwei Sekunden.
-- **Web** lädt die Seite per `URLSession` (GET, Weiterleitungen werden verfolgt, Zeitüberschreitung 10 s). Jede Prüfung baut eine neue Verbindung auf, sodass DNS- und TLS-Zeit in der Ladezeit stecken. Geladen wird nur das HTML, keine Bilder oder Skripte.
-- **Route** nutzt `/usr/sbin/traceroute`. Der Hop-Bereich wird in kleine Teile zerlegt, die gleichzeitig laufen. Die Messung dauert dadurch meist ein bis drei Sekunden statt bis zu 20. Gemessen wird nur für den gerade gewählten Host. Router, die nicht auf Traceroute antworten, erscheinen als „keine Antwort“. Das ist normal und bedeutet nicht, dass die Verbindung gestört ist.
-- **Oberfläche** wird höchstens viermal pro Sekunde aktualisiert, auch wenn viele Hosts gleichzeitig messen. Diagramme zeichnen höchstens etwa 400 Punkte, die Mini-Verläufe in der Tabelle sind eine einfache Canvas-Zeichnung.
+- **Ping** runs `/sbin/ping` (`ping6` for IPv6) with a timeout of two seconds.
+- **Web** loads the page with `URLSession` (GET, redirects are followed, timeout 10 s). Every check opens a new connection, so DNS and TLS time are part of the load time. Only the HTML is loaded, not images or scripts.
+- **Route** uses `/usr/sbin/traceroute`. The hop range is split into small parts that run at the same time, so a measurement usually takes one to three seconds instead of up to 20. It is only measured for the host that is currently selected. Routers that do not answer traceroute appear as "no response". That is normal and does not mean your connection is broken.
+- **Interface** updates at most four times a second, even when many hosts are measured at once. Charts draw at most about 400 points, and the small history graphs in the table are a plain Canvas drawing.
 
-## Projektstruktur
+## Project structure
 
 ```
 Package.swift
-build_app.sh            baut build/PingWatch.app
-Resources/              Info.plist, AppIcon.icns
-tools/make_icon.swift   erzeugt das App-Icon
+build_app.sh            builds build/PingWatch.app
+Resources/              Info.plist, AppIcon.icns, en.lproj and de.lproj (texts)
+tools/make_icon.swift   creates the app icon
+tools/make_release.sh   builds the release ZIP
 Sources/
-  PingCore/             Logik ohne Oberfläche: Ping, Traceroute, Web-Prüfung,
-                        Statuswechsel, Statistik, Historie (mit Unit-Tests)
-  PingWatch/            SwiftUI-App: Oberfläche, Monitor, Töne, Banner
-Tests/PingCoreTests/    Unit-Tests für PingCore
+  PingCore/             logic without UI: ping, traceroute, web check,
+                        state changes, statistics, history (with unit tests)
+  PingWatch/            SwiftUI app: interface, monitor, sounds, banners
+Tests/PingCoreTests/    unit tests for PingCore
 ```
 
-## Hinweise
+## Notes
 
-- Die App läuft **ohne App-Sandbox**, weil sie `ping` und `traceroute` als Programme startet.
-- Für Web-Prüfungen per `http://` erlaubt die Info.plist unverschlüsselte Verbindungen (`NSAllowsArbitraryLoads`).
-- Fremde Webseiten solltest du nicht im Sekundentakt abrufen. Der Standard für Web ist deshalb 30 Sekunden.
-- Die gespeicherten Daten liegen in den Benutzereinstellungen unter `local.pingwatch.app`. Zurücksetzen geht mit:
+- The app runs **without the App Sandbox** because it starts `ping` and `traceroute` as programs.
+- For web checks over `http://` the Info.plist allows unencrypted connections (`NSAllowsArbitraryLoads`).
+- Do not poll other people's websites every second. That is why the default for Web is 30 seconds.
+- Saved data lives in the user defaults under `local.pingwatch.app`. To reset it:
 
   ```bash
   defaults delete local.pingwatch.app
   ```
 
-## Für Entwickler
+## For developers
 
-- **Release-ZIP bauen:** Das Skript baut die App für Apple Silicon und Intel zusammen, signiert sie ad hoc und packt sie nach `dist/PingWatch-<Version>.zip`. Die Versionsnummer steht in `Resources/Info.plist`. Am Ende gibt es die Prüfsumme aus.
+- **Translations:** The texts live in `Resources/en.lproj` and `Resources/de.lproj` (`Localizable.strings`). The German texts in the code are the keys. To add a language, create a folder `<language>.lproj` with the same keys and add the language to `CFBundleLocalizations` in `Info.plist`.
+
+- **Build the release ZIP:** The script builds the app for Apple Silicon and Intel, signs it ad hoc and packs it into `dist/PingWatch-<version>.zip`. The version number is in `Resources/Info.plist`. At the end it prints the checksum.
 
   ```bash
   ./tools/make_release.sh
   ```
 
-- **Icon neu erzeugen:**
+- **Regenerate the icon:**
 
   ```bash
   swift tools/make_icon.swift Resources/AppIcon.iconset
   iconutil -c icns Resources/AppIcon.iconset -o Resources/AppIcon.icns
   ```
 
-- **Last testen:** Mit der Umgebungsvariable `PINGWATCH_PREFILL=3600` startet die App mit simulierten Messwerten (eine Stunde Verlauf pro Host und zehn Hops pro Route). So lässt sich die Oberfläche unter Last prüfen:
+- **Load test:** With the environment variable `PINGWATCH_PREFILL=3600` the app starts with simulated measurements (one hour of history per host and ten hops per route). This lets you check the interface under load:
 
   ```bash
   open --env PINGWATCH_PREFILL=3600 build/PingWatch.app
   ```
 
-- Ein Test der Web-Prüfung startet einen lokalen Webserver mit `python3` und wird übersprungen, wenn `python3` fehlt.
+- A test of the web check starts a local web server with `python3` and is skipped if `python3` is missing.
 
-## Lizenz
+## License
 
-Apache License 2.0, siehe [LICENSE](LICENSE).
+Apache License 2.0, see [LICENSE](LICENSE).

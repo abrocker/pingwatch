@@ -12,7 +12,7 @@ struct TraceGraph: View {
     let hostID: UUID
     /// The hop whose timeline is shown below; nil means the target (round trip).
     @Binding var selectedHop: Int?
-    var roundTripLabel = "Round Trip (ms)"
+    var roundTripLabel = String(localized: "Round Trip (ms)")
 
     private static let rowHeight: CGFloat = 26
     private static let headerHeight: CGFloat = 24
@@ -65,7 +65,7 @@ struct TraceGraph: View {
             Text("Ø").frame(width: 50, alignment: .trailing)
             Text("Min").frame(width: 50, alignment: .trailing)
             Text("Akt.").frame(width: 50, alignment: .trailing)
-            Text("Verl.%").frame(width: 54, alignment: .trailing)
+            (Text("Verl.") + Text(verbatim: " %")).frame(width: 54, alignment: .trailing)
         }
         .font(.caption.weight(.semibold))
         .foregroundStyle(.secondary)

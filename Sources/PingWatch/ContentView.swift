@@ -82,8 +82,8 @@ struct ContentView: View {
 
                     HStack(spacing: 8) {
                         Image(systemName: "plus.circle.fill").foregroundStyle(.secondary)
-                        TextField(kind == .web ? "Web-Adresse, z. B. https://www.example.com"
-                                               : "IP oder Hostname, z. B. 192.168.1.1 oder example.com",
+                        TextField(kind == .web ? LocalizedStringKey("Web-Adresse, z. B. https://www.example.com")
+                                               : LocalizedStringKey("IP oder Hostname, z. B. 192.168.1.1 oder example.com"),
                                   text: $input)
                             .textFieldStyle(.plain)
                             .onSubmit(add)
@@ -122,7 +122,7 @@ struct ContentView: View {
                     HStack(spacing: 6) {
                         Image(systemName: "clock").foregroundStyle(.secondary)
                         Picker("Zeitraum", selection: $monitor.windowSeconds) {
-                            ForEach(Self.windows, id: \.seconds) { Text($0.label).tag($0.seconds) }
+                            ForEach(Self.windows, id: \.seconds) { Text(LocalizedStringKey($0.label)).tag($0.seconds) }
                         }
                         .labelsHidden()
                         .fixedSize()
@@ -144,8 +144,8 @@ struct ContentView: View {
                     }
                     .buttonStyle(.glass)
                     .keyboardShortcut("m", modifiers: [.command, .shift])
-                    .help(monitor.muted ? "Alarmtöne sind stumm – klicken zum Einschalten (⇧⌘M)"
-                                        : "Alarmtöne stumm schalten (⇧⌘M)")
+                    .help(monitor.muted ? LocalizedStringKey("Alarmtöne sind stumm – klicken zum Einschalten (⇧⌘M)")
+                                        : LocalizedStringKey("Alarmtöne stumm schalten (⇧⌘M)"))
 
                     Button { showSettings.toggle() } label: { Image(systemName: "gearshape") }
                         .buttonStyle(.glass)
@@ -163,7 +163,7 @@ struct ContentView: View {
 
     private func add() {
         let rejected = monitor.add(input, kind: kind)
-        error = rejected.isEmpty ? nil : "Ungültig: \(rejected.joined(separator: ", "))"
+        error = rejected.isEmpty ? nil : String(localized: "Ungültig: \(rejected.joined(separator: ", "))")
         input = rejected.joined(separator: " ")
     }
 
@@ -176,7 +176,7 @@ struct ContentView: View {
                     Circle().fill(color(for: host)).frame(width: 10, height: 10)
                     Image(systemName: host.kind == .web ? "globe" : "dot.radiowaves.left.and.right")
                         .foregroundStyle(.secondary)
-                        .help(host.kind == .web ? "Web-Prüfung (HTTP/HTTPS)" : "Ping")
+                        .help(host.kind == .web ? LocalizedStringKey("Web-Prüfung (HTTP/HTTPS)") : LocalizedStringKey("Ping"))
                     Text(host.name).font(.system(.body, design: .monospaced)).lineLimit(1).truncationMode(.middle)
                 }
             }
@@ -335,7 +335,7 @@ struct HostDetail: View {
                         legend
                     }
                     TraceGraph(hostID: id, selectedHop: $selectedHop,
-                               roundTripLabel: host.kind == .web ? "HTTP-Ladezeit (ms)" : "Round Trip (ms)")
+                               roundTripLabel: host.kind == .web ? String(localized: "HTTP-Ladezeit (ms)") : String(localized: "Round Trip (ms)"))
                 }
                 .glassCard()
                 .frame(maxHeight: .infinity)
@@ -349,7 +349,7 @@ struct HostDetail: View {
                                 .frame(width: 14)
                         }
                         .buttonStyle(.borderless)
-                        .help(timelineCollapsed ? "Timeline einblenden" : "Timeline ausblenden")
+                        .help(timelineCollapsed ? LocalizedStringKey("Timeline einblenden") : LocalizedStringKey("Timeline ausblenden"))
                         Text(timelineTitle(host: host, hop: hop)).font(.headline)
                         Spacer()
                         Text(windowLabel).font(.caption).foregroundStyle(.secondary)
@@ -395,22 +395,23 @@ struct HostDetail: View {
 
     private func timelineTitle(host: HostEntry, hop: HopInfo?) -> String {
         guard let hop else {
-            return host.kind == .web ? "Timeline · Ladezeit von \(host.name)" : "Timeline · \(host.name) (Round Trip)"
+            return host.kind == .web ? String(localized: "Timeline · Ladezeit von \(host.name)")
+                                     : String(localized: "Timeline · \(host.name) (Round Trip)")
         }
-        return "Timeline · Hop \(hop.hop) · \(hop.address ?? "keine Antwort")"
+        return String(localized: "Timeline · Hop \(hop.hop) · \(hop.address ?? String(localized: "keine Antwort"))")
     }
 
     private var windowLabel: String {
         switch monitor.windowSeconds {
-        case 0: return "alle Daten"
-        case 3600: return "letzte Stunde"
-        case let seconds: return "letzte \(seconds / 60) Minuten"
+        case 0: return String(localized: "alle Daten")
+        case 3600: return String(localized: "letzte Stunde")
+        case let seconds: return String(localized: "letzte \(seconds / 60) Minuten")
         }
     }
 
     private func stateBadge(for host: HostEntry) -> some View {
         let (text, color) = badge(for: host)
-        return Text(text)
+        return Text(LocalizedStringKey(text))
             .font(.caption.weight(.semibold))
             .padding(.horizontal, 10)
             .padding(.vertical, 4)
@@ -442,7 +443,7 @@ struct HostDetail: View {
                     id: \.0) { label, color in
                 HStack(spacing: 4) {
                     Circle().fill(color).frame(width: 8, height: 8)
-                    Text(label)
+                    Text(LocalizedStringKey(label))
                 }
             }
             HStack(spacing: 4) {

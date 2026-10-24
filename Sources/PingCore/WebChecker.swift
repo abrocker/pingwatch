@@ -36,21 +36,21 @@ public enum HTTPStatus {
     public static func text(_ code: Int) -> String {
         switch code {
         case 200: return "OK"
-        case 201: return "Erstellt"
-        case 204: return "Kein Inhalt"
-        case 301: return "Dauerhaft verschoben"
-        case 302: return "Weitergeleitet"
-        case 304: return "Nicht geändert"
-        case 400: return "Ungültige Anfrage"
-        case 401: return "Nicht autorisiert"
-        case 403: return "Verboten"
-        case 404: return "Nicht gefunden"
-        case 408: return "Zeitüberschreitung"
-        case 429: return "Zu viele Anfragen"
-        case 500: return "Serverfehler"
+        case 201: return String(localized: "Erstellt")
+        case 204: return String(localized: "Kein Inhalt")
+        case 301: return String(localized: "Dauerhaft verschoben")
+        case 302: return String(localized: "Weitergeleitet")
+        case 304: return String(localized: "Nicht geändert")
+        case 400: return String(localized: "Ungültige Anfrage")
+        case 401: return String(localized: "Nicht autorisiert")
+        case 403: return String(localized: "Verboten")
+        case 404: return String(localized: "Nicht gefunden")
+        case 408: return String(localized: "Zeitüberschreitung")
+        case 429: return String(localized: "Zu viele Anfragen")
+        case 500: return String(localized: "Serverfehler")
         case 502: return "Bad Gateway"
-        case 503: return "Nicht verfügbar"
-        case 504: return "Gateway-Zeitüberschreitung"
+        case 503: return String(localized: "Nicht verfügbar")
+        case 504: return String(localized: "Gateway-Zeitüberschreitung")
         default: return ""
         }
     }
@@ -76,7 +76,7 @@ public struct WebResult: Equatable {
 
     /// "HTTP 200 OK", "HTTP 503 Nicht verfügbar", or the error, e.g. "Zeitüberschreitung".
     public var summary: String {
-        guard let statusCode else { return error ?? "Keine Antwort" }
+        guard let statusCode else { return error ?? String(localized: "Keine Antwort") }
         return HTTPStatus.summary(statusCode)
     }
 }
@@ -86,7 +86,7 @@ public enum WebChecker {
     /// Every check uses a fresh connection, so DNS and TLS problems show up in the time.
     public static func check(_ urlString: String, timeout: TimeInterval = 10) async -> WebResult {
         guard let url = URL(string: urlString) else {
-            return WebResult(statusCode: nil, latencyMs: nil, error: "Ungültige Adresse")
+            return WebResult(statusCode: nil, latencyMs: nil, error: String(localized: "Ungültige Adresse"))
         }
         let configuration = URLSessionConfiguration.ephemeral
         configuration.urlCache = nil
@@ -104,7 +104,7 @@ public enum WebChecker {
             let (_, response) = try await session.data(for: request)
             let elapsed = Double(DispatchTime.now().uptimeNanoseconds - start) / 1_000_000
             guard let http = response as? HTTPURLResponse else {
-                return WebResult(statusCode: nil, latencyMs: nil, error: "Keine HTTP-Antwort")
+                return WebResult(statusCode: nil, latencyMs: nil, error: String(localized: "Keine HTTP-Antwort"))
             }
             return WebResult(statusCode: http.statusCode, latencyMs: elapsed, error: nil)
         } catch {
@@ -115,14 +115,14 @@ public enum WebChecker {
     static func describe(_ error: Error) -> String {
         guard let urlError = error as? URLError else { return error.localizedDescription }
         switch urlError.code {
-        case .timedOut: return "Zeitüberschreitung"
-        case .cannotFindHost, .dnsLookupFailed: return "Host nicht gefunden"
-        case .cannotConnectToHost: return "Verbindung abgelehnt"
-        case .networkConnectionLost: return "Verbindung abgebrochen"
-        case .notConnectedToInternet: return "Kein Netzwerk"
+        case .timedOut: return String(localized: "Zeitüberschreitung")
+        case .cannotFindHost, .dnsLookupFailed: return String(localized: "Host nicht gefunden")
+        case .cannotConnectToHost: return String(localized: "Verbindung abgelehnt")
+        case .networkConnectionLost: return String(localized: "Verbindung abgebrochen")
+        case .notConnectedToInternet: return String(localized: "Kein Netzwerk")
         case .secureConnectionFailed, .serverCertificateUntrusted, .serverCertificateHasBadDate,
              .serverCertificateHasUnknownRoot, .serverCertificateNotYetValid, .clientCertificateRejected:
-            return "TLS-/Zertifikatsfehler"
+            return String(localized: "TLS-/Zertifikatsfehler")
         default: return urlError.localizedDescription
         }
     }

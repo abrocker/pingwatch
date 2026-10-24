@@ -380,13 +380,16 @@ final class Monitor: ObservableObject {
         switch event {
         case .becameUp:
             guard before != .unknown else { return }
-            post(host, "\(host.name) ist wieder erreichbar", (check.detail ?? "Ping antwortet") + time)
+            post(host, String(localized: "\(host.name) ist wieder erreichbar"),
+                 (check.detail ?? String(localized: "Ping antwortet")) + time)
         case .becameDown:
-            post(host, "\(host.name) ist nicht erreichbar", check.detail ?? "keine Antwort auf Ping")
+            post(host, String(localized: "\(host.name) ist nicht erreichbar"),
+                 check.detail ?? String(localized: "keine Antwort auf Ping"))
         case nil:
             guard host.kind == .web, let previousCode, previousCode != (check.statusCode ?? 0) else { return }
-            let old = previousCode == 0 ? "keine Antwort" : HTTPStatus.summary(previousCode)
-            post(host, "\(host.name): Status geändert", "\(old) → \(check.detail ?? "keine Antwort")")
+            let none = String(localized: "keine Antwort")
+            let old = previousCode == 0 ? none : HTTPStatus.summary(previousCode)
+            post(host, String(localized: "\(host.name): Status geändert"), "\(old) → \(check.detail ?? none)")
         }
     }
 

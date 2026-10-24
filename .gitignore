@@ -64,3 +64,4 @@ build/
 .swiftpm/
 .DS_Store
 .claude/
+dist/

@@ -4,6 +4,10 @@ Eine native Mac-App, die Hosts und Webseiten überwacht und sich bemerkbar macht
 
 Geschrieben in Swift und SwiftUI, ohne Fremdbibliotheken. Die Oberfläche nutzt Liquid Glass von macOS 26.
 
+<p align="center">
+  <img src="docs/screenshot.png" alt="PingWatch: Hosttabelle, Route mit Latenz-Graph und Timeline" width="820">
+</p>
+
 ## Funktionen
 
 **Überwachen**
@@ -19,6 +23,10 @@ Geschrieben in Swift und SwiftUI, ohne Fremdbibliotheken. Die Oberfläche nutzt 
 - **Systembanner:** Bei „wieder erreichbar“, „nicht erreichbar“ und bei Web-Hosts auch, wenn sich der HTTP-Status ändert, zum Beispiel 200 → 503.
 - **Mute-Knopf** (⇧⌘M): schaltet die Alarmtöne stumm. Banner bleiben aktiv.
 
+<p align="center">
+  <img src="docs/notification-banner.png" alt="Systembanner: Host ist nicht erreichbar" width="400">
+</p>
+
 **Analysieren**
 - **Hosttabelle** mit aktueller, durchschnittlicher, minimaler und maximaler Antwortzeit, Verlust in Prozent, HTTP-Status und einem Mini-Verlauf.
 - **Trace Graph:** Für den gewählten Host wird die Route per Traceroute ermittelt. Jede Zeile ist ein Router mit IP, Name, Ø, Min, aktuell und Verlust. Daneben zeigt ein Graph pro Zeile den Bereich von Min bis Max, den Verlust und den Durchschnitt. Eine Linie verbindet die Durchschnitte der Hops, sodass man sieht, welcher Hop wie viel Latenz dazubringt.
@@ -28,12 +36,29 @@ Geschrieben in Swift und SwiftUI, ohne Fremdbibliotheken. Die Oberfläche nutzt 
 
 Hosts, Einstellungen, die Auswahl und die Eingabe-Historie bleiben nach einem Neustart erhalten. Die Messwerte selbst werden nicht gespeichert.
 
-## Voraussetzungen
+## Download und Installation
+
+Die fertige App gibt es auf der [Releases-Seite](https://github.com/abrocker/pingwatch/releases/latest) als ZIP-Datei (`PingWatch-1.0.0.zip`). Sie läuft auf Apple-Silicon- und Intel-Macs mit **macOS 26 oder neuer**.
+
+1. Die ZIP-Datei laden und per Doppelklick entpacken. Danach `PingWatch.app` in den Ordner **Programme** ziehen.
+2. `PingWatch` per Doppelklick starten. macOS zeigt beim ersten Mal eine Warnung, dass die App nicht geöffnet werden kann, weil der Entwickler nicht überprüft werden konnte. Das ist erwartbar (siehe unten). Schließe die Meldung.
+3. Öffne **Systemeinstellungen → Datenschutz & Sicherheit**, scrolle nach unten zur Meldung über PingWatch und klicke auf **Trotzdem öffnen**. Bestätige mit deinem Passwort oder Touch ID. Das ist nur beim ersten Start nötig.
+4. Beim ersten Start fragt macOS, ob PingWatch Mitteilungen senden darf. Erlaube es, wenn du Systembanner möchtest.
+
+Statt Schritt 2 und 3 geht es auch im Terminal. Der Befehl entfernt die Download-Markierung, danach startet die App normal:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/PingWatch.app
+```
+
+**Warum die Warnung?** Die App ist nur ad hoc signiert, nicht mit einer Apple-Developer-ID signiert und notarisiert. Dafür wäre ein kostenpflichtiges Apple-Entwicklerkonto nötig. Wenn du der Datei nicht traust, vergleiche die Prüfsumme (`shasum -a 256 PingWatch-1.0.0.zip`) mit der Angabe auf der Releases-Seite oder baue die App aus dem Quellcode.
+
+## Aus dem Quellcode bauen
+
+Voraussetzungen:
 
 - macOS 26 oder neuer
 - Xcode mit Swift-Toolchain (entwickelt und getestet mit Xcode 27.1, Swift 6.4)
-
-## Bauen und starten
 
 ```bash
 ./build_app.sh
@@ -88,6 +113,12 @@ Tests/PingCoreTests/    Unit-Tests für PingCore
   ```
 
 ## Für Entwickler
+
+- **Release-ZIP bauen:** Das Skript baut die App für Apple Silicon und Intel zusammen, signiert sie ad hoc und packt sie nach `dist/PingWatch-<Version>.zip`. Die Versionsnummer steht in `Resources/Info.plist`. Am Ende gibt es die Prüfsumme aus.
+
+  ```bash
+  ./tools/make_release.sh
+  ```
 
 - **Icon neu erzeugen:**
 
